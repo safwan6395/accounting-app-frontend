@@ -10,7 +10,7 @@ import "./App.css";
 import AppContext from "./context/AppContext";
 
 function App() {
-  const { setAuthState } = useContext(AppContext);
+  const { authState, setAuthState } = useContext(AppContext);
   const [section, setSection] = useState(0);
   const [accounts, setAccounts] = useState([]);
 
@@ -30,10 +30,22 @@ function App() {
     setAccounts([...accounts, account]);
   };
 
+  // to automatically log in
   useEffect(() => {
     localStorage.getItem("authState") &&
       setAuthState(JSON.parse(localStorage.getItem("authState")));
   }, [setAuthState]);
+
+  //  to automatically fetch all accounts that user previously created
+  useEffect(() => {
+    (async () => {
+      const res = await fetch(`http://localhost:3000/users/${authState.userId}/accounts`) 
+
+      const resData = await res.json();
+
+      setAccounts(resData.data.accounts)
+    })();
+  }, [authState.userId]);
 
   return (
     <div className='font-custom flex flex-col h-screen'>
