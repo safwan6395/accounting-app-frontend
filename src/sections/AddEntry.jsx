@@ -1,14 +1,14 @@
 import AddEntryForm from "../components/AddEntryForm";
 
 // Exist for Historical Reasons
-const AddEntry = ({addEntryHandler, accounts}) => {
-  const takeEntryHandler = (entry) => {
-    addEntryHandler(entry)
-  }
-
+const AddEntry = ({ addEntryHandler, addTransactionHandler, accounts }) => {
   return (
-    <section className='mx-auto'>  
-      <AddEntryForm accounts={accounts} takeEntryHandler={takeEntryHandler} />
+    <section className='mx-auto'>
+      <AddEntryForm
+        accounts={accounts}
+        addTransactionHandler={addTransactionHandler}
+        addEntryHandler={addEntryHandler}
+      />
     </section>
   );
 };

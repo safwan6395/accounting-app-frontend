@@ -12,7 +12,7 @@ const InputFields = ({i, accounts, name, numInputFields, changeNumInputFieldsHan
             select an Account
           </option>
           {accounts.map((acc) => (
-            <option value={acc.account_name} key={acc._id}>
+            <option value={`${acc.account_name} ${acc._id}`} key={acc._id}>
               {acc.account_name} {" "} {`(${acc.account_type})`}
             </option>
           ))}

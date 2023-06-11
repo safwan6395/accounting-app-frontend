@@ -8,26 +8,34 @@ import GeneralJournal from "./sections/GeneralJournal";
 
 import "./App.css";
 import AppContext from "./context/AppContext";
+import TAccounts from "./sections/TAccounts";
 
 function App() {
   const { authState, setAuthState } = useContext(AppContext);
   const [section, setSection] = useState(0);
   const [accounts, setAccounts] = useState([]);
+  const [transactions, setTransactions] = useState([]);
 
   const [entries, setEntries] = useState([]);
   const changeSectionHandler = (section) => {
     setSection(section);
   };
 
-  // To take new entry from AddEntry
+  // To take new entry from AddEntry which takes entry from AddEntryForm
   const addEntryHandler = (entry) => {
-    setEntries([...entries, entry]);
-    // localStorage.setItem("entries", JSON.stringify([...entries, entry]));
+    setEntries((prevState) => [...prevState, entry]);
   };
 
   // To take new account from AddAccount
   const addAccountHandler = (account) => {
-    setAccounts([...accounts, account]);
+    setAccounts((prevState) => [...prevState, account]);
+  };
+
+  // To take new tranaction from AddEntry which takes entry from AddEntryForm
+  const addTransactionHandler = (transaction) => {
+    setTransactions((prevState) => {
+      return [...prevState, transaction];
+    });
   };
 
   // to automatically log in
@@ -39,13 +47,28 @@ function App() {
   //  to automatically fetch all accounts that user previously created
   useEffect(() => {
     (async () => {
-      const res = await fetch(`http://localhost:3000/users/${authState.userId}/accounts`) 
+      const res = await fetch(
+        `http://localhost:3000/users/${authState.userId}/accounts`
+      );
 
       const resData = await res.json();
 
-      setAccounts(resData.data.accounts)
+      setAccounts(resData.data.accounts);
     })();
   }, [authState.userId]);
+
+  // to automatically fetch all transactions that user previously did
+  useEffect(() => {
+    (async () => {
+      const res = await fetch(
+        `http://localhost:3000/users/${authState.userId}/transactions`
+      );
+
+      const resData = await res.json();
+
+      setTransactions(resData.data.transactions);
+    })();
+  }, [authState.userId])
 
   return (
     <div className='font-custom flex flex-col h-screen'>
@@ -57,11 +80,16 @@ function App() {
           <AddAccount addAccountHandler={addAccountHandler} />
         ) : null}
         {section === 1 ? (
-          <AddEntry addEntryHandler={addEntryHandler} accounts={accounts} />
+          <AddEntry
+            addEntryHandler={addEntryHandler}
+            addTransactionHandler={addTransactionHandler}
+            accounts={accounts}
+          />
         ) : null}
         {section === 2 ? <GeneralJournal entries={entries} /> : null}
-        {section === 3 ? <div></div> : null}
+        {section === 3 ? <TAccounts transactions={transactions} /> : null}
         {section === 4 ? <div></div> : null}
+        {section === 5 ? <div></div> : null}
       </main>
     </div>
   );

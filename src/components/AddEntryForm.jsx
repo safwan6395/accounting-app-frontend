@@ -1,14 +1,17 @@
-import { Fragment, useState } from "react";
+import { Fragment, useContext, useState } from "react";
 import InputFields from "./InputFields";
 import Modal from "./Modal";
+import AppContext from "../context/AppContext";
 
-const AddEntryForm = ({ accounts, takeEntryHandler }) => {
+const AddEntryForm = ({ accounts, addEntryHandler, addTransactionHandler }) => {
   const [showModal, setShowModal] = useState({
     visibility: false,
     reason: null,
   });
   const [numDebitInputFields, setNumDebitInputFields] = useState(1);
   const [numCreditInputFields, setNumCreditInputFields] = useState(1);
+
+  const { authState } = useContext(AppContext);
 
   const changeNumDebitInputFieldsHandler = (numFields) => {
     setNumDebitInputFields(numFields);
@@ -34,19 +37,25 @@ const AddEntryForm = ({ accounts, takeEntryHandler }) => {
       if (key === "description") requireObj.description = value;
 
       if (key.startsWith("debit-account-title")) {
-        valueFromPrevIter = value;
+        valueFromPrevIter = value.split(" ");
       } else if (key.startsWith("debit-amount")) {
         requireObj.debitAccounts.push({
-          debitAccount: valueFromPrevIter,
+          _id: valueFromPrevIter[valueFromPrevIter.length - 1],
+          debitAccount: valueFromPrevIter
+            .map((v, i, a) => (i !== a.length - 1 ? v : ""))
+            .join(" "),
           amount: value,
         });
       }
 
       if (key.startsWith("credit-account-title")) {
-        valueFromPrevIter = value;
+        valueFromPrevIter = value.split(" ");
       } else if (key.startsWith("credit-amount")) {
         requireObj.creditAccounts.push({
-          creditAccount: valueFromPrevIter,
+          _id: valueFromPrevIter[valueFromPrevIter.length - 1],
+          creditAccount: valueFromPrevIter
+            .map((v, i, a) => (i !== a.length - 1 ? v : ""))
+            .join(" "),
           amount: value,
         });
       }
@@ -76,8 +85,55 @@ const AddEntryForm = ({ accounts, takeEntryHandler }) => {
       });
     }
 
+    // Adding each transaction to DB
+    requireObj.debitAccounts.forEach(async (debAcc) => {
+      const res = await fetch(
+        `http://localhost:3000/accounts/${debAcc._id}/transactions`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            date: requireObj.date,
+            account_name: debAcc.debitAccount,
+            transaction_type: "Debit",
+            amount: debAcc.amount,
+            user_id: authState.userId,
+          }),
+        }
+      );
+
+      const resData = await res.json();
+
+      addTransactionHandler(resData.data.transaction);
+    });
+
+    requireObj.creditAccounts.forEach(async (credAcc) => {
+      const res = await fetch(
+        `http://localhost:3000/accounts/${credAcc._id}/transactions`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            date: requireObj.date,
+            account_name: credAcc.creditAccount,
+            transaction_type: "Credit",
+            amount: credAcc.amount,
+            user_id: authState.userId,
+          }),
+        }
+      );
+
+      const resData = await res.json();
+
+      addTransactionHandler(resData.data.transaction);
+    });
+
     // lifting the data up
-    takeEntryHandler(requireObj);
+    addEntryHandler(requireObj);
     console.log("submitted");
 
     // reseting the form
