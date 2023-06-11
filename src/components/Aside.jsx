@@ -1,6 +1,6 @@
 const Aside = ({ section, changeSectionHandler }) => {
   return (
-    <aside className='w-60 bg-slate-200 overflow-hidden'>
+    <aside className='w-60 bg-slate-200 overflow-hidden flex-shrink-0'>
       <ul className='flex flex-col items-center my-2 mx-4'>
         <li
           onClick={() => {
