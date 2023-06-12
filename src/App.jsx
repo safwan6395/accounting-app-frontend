@@ -15,8 +15,8 @@ function App() {
   const [section, setSection] = useState(0);
   const [accounts, setAccounts] = useState([]);
   const [transactions, setTransactions] = useState([]);
-
   const [entries, setEntries] = useState([]);
+
   const changeSectionHandler = (section) => {
     setSection(section);
   };
@@ -24,6 +24,7 @@ function App() {
   // To take new entry from AddEntry which takes entry from AddEntryForm
   const addEntryHandler = (entry) => {
     setEntries((prevState) => [...prevState, entry]);
+    console.log([...entries, entry]);
   };
 
   // To take new account from AddAccount
@@ -68,7 +69,7 @@ function App() {
 
       setTransactions(resData.data.transactions);
     })();
-  }, [authState.userId])
+  }, [authState.userId]);
 
   return (
     <div className='font-custom flex flex-col h-screen'>

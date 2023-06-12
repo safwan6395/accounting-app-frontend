@@ -12,6 +12,7 @@ const AddAccount = ({ addAccountHandler }) => {
 
   const accountTitle = useRef();
   const accountType = useRef();
+  const balanceType = useRef();
 
   const submitHandler = async (e) => {
     e.preventDefault();
@@ -25,7 +26,8 @@ const AddAccount = ({ addAccountHandler }) => {
     // checking correctness of inputs
     if (
       accountTitle.current.value.trim().length === 0 ||
-      accountType.current.value === ""
+      accountType.current.value === "" ||
+      balanceType.current.value === ""
     )
       return setShowModal({
         visibility: true,
@@ -40,6 +42,7 @@ const AddAccount = ({ addAccountHandler }) => {
       body: JSON.stringify({
         account_name: accountTitle.current.value,
         account_type: accountType.current.value,
+        balance_type: balanceType.current.value,
         user_id: authState.userId,
       }),
     });
@@ -49,6 +52,7 @@ const AddAccount = ({ addAccountHandler }) => {
 
     accountTitle.current.value = "";
     accountType.current.value = "";
+    balanceType.current.value = "";
   };
 
   return (
@@ -76,13 +80,13 @@ const AddAccount = ({ addAccountHandler }) => {
         <label className=''>
           <span className='mr-2'>Account Type</span>
           <select
-            className='border-2 border-gray-200 p-2 w-44'
+            className='border-2 border-gray-200 p-2 w-48'
             name='account-type'
             ref={accountType}
             id=''
           >
             <option className='text-gray-400 disabled selected' value='' hidden>
-              select an Account
+              select an account
             </option>
 
             <option value='asset-account'>Asset Account</option>
@@ -91,6 +95,21 @@ const AddAccount = ({ addAccountHandler }) => {
             <option value='expense-account'>Expense Account</option>
             <option value='contra-asset-account'>Contra Asset Account</option>
             <option value='drawings-account'>Drawings Account</option>
+          </select>
+        </label>
+        <label className=''>
+          <span className='mr-2'>Normal Balance</span>
+          <select
+            className='border-2 border-gray-200 p-2 w-48'
+            name='balance-type'
+            ref={balanceType}
+            id=''
+          >
+            <option className='text-gray-400 disabled selected' value='' hidden>
+              select balance type
+            </option>
+            <option value='debit'>Debit Balance</option>
+            <option value='credit'>Credit Balance</option>
           </select>
         </label>
         <button className='mx-auto px-10 py-2 bg-slate-200' type='submit'>

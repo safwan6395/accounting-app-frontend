@@ -2,7 +2,7 @@ import { Fragment } from "react";
 
 const GeneralJournal = ({ entries }) => {
   return (
-    <section className='flex-1 bg-slate-50 p-4 pb-28 relative'>
+    <section className='flex-1 bg-slate-50 p-4 pb-28 relative -z-10'>
       {entries.length === 0 ? (
         <p className='text-center text-xl pt-8'>No entries to display!</p>
       ) : (

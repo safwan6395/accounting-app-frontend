@@ -105,10 +105,28 @@ const AddEntryForm = ({ accounts, addEntryHandler, addTransactionHandler }) => {
       );
 
       const resData = await res.json();
-
       addTransactionHandler(resData.data.transaction);
+
+      // if ()
+
+      await fetch(
+        `http://localhost:3000/accounts/${resData.data.transaction.account_id}`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-type": "application/json",
+          },
+          body: JSON.stringify({
+            transaction_type: resData.data.transaction.transaction_type,
+            amount: resData.data.transaction.amount,
+          }),
+        }
+      );
+
+      console.log(resData.data.transaction);
     });
 
+    // Adding each transaction to DB
     requireObj.creditAccounts.forEach(async (credAcc) => {
       const res = await fetch(
         `http://localhost:3000/accounts/${credAcc._id}/transactions`,
@@ -126,10 +144,24 @@ const AddEntryForm = ({ accounts, addEntryHandler, addTransactionHandler }) => {
           }),
         }
       );
-
       const resData = await res.json();
-
       addTransactionHandler(resData.data.transaction);
+
+      await fetch(
+        `http://localhost:3000/accounts/${resData.data.transaction.account_id}`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-type": "application/json",
+          },
+          body: JSON.stringify({
+            transaction_type: resData.data.transaction.transaction_type,
+            amount: resData.data.transaction.amount,
+          }),
+        }
+      );
+
+      console.log(resData.data.transaction);
     });
 
     // lifting the data up
