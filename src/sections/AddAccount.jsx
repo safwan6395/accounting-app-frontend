@@ -95,6 +95,7 @@ const AddAccount = ({ addAccountHandler }) => {
             <option value='expense-account'>Expense Account</option>
             <option value='contra-asset-account'>Contra Asset Account</option>
             <option value='drawings-account'>Drawings Account</option>
+            <option value='equity-account'>Equity Account</option>
           </select>
         </label>
         <label className=''>

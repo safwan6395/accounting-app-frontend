@@ -7,6 +7,7 @@ import Aside from "./components/Aside";
 import GeneralJournal from "./sections/GeneralJournal";
 import AppContext from "./context/AppContext";
 import TAccounts from "./sections/TAccounts";
+import FinancialStatements from "./sections/FinancialStatements";
 
 import "./App.css";
 
@@ -55,7 +56,7 @@ function App() {
 
       setAccounts(resData.data.accounts);
     })();
-  }, [authState.userId]);
+  }, [authState.userId, entries]);
 
   // to automatically fetch all transactions that user previously did
   useEffect(() => {
@@ -103,7 +104,7 @@ function App() {
         ) : null}
         {section === 2 ? <GeneralJournal entries={entries} /> : null}
         {section === 3 ? <TAccounts transactions={transactions} /> : null}
-        {section === 4 ? <div></div> : null}
+        {section === 4 ? <FinancialStatements accounts={accounts} /> : null}
         {section === 5 ? <div></div> : null}
       </main>
     </div>
