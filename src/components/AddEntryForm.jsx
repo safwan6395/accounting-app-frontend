@@ -70,13 +70,11 @@ const AddEntryForm = ({ accounts, addEntryHandler, addTransactionHandler }) => {
     requireObj.debitAccounts.forEach(
       (debAcc) => (debAccAmount += +debAcc.amount)
     );
-    // console.log(credAccAmount, debAccAmount);
     if (credAccAmount !== debAccAmount) {
       return setShowModal({
         visibility: true,
         reason: "credit and debit amounts are not equal",
       });
-      // console.log("credit and debit amounts are not equal");
     }
     if (credAccAmount === 0 || debAccAmount === 0) {
       return setShowModal({
@@ -107,8 +105,6 @@ const AddEntryForm = ({ accounts, addEntryHandler, addTransactionHandler }) => {
       const resData = await res.json();
       addTransactionHandler(resData.data.transaction);
 
-      // if ()
-
       await fetch(
         `http://localhost:3000/accounts/${resData.data.transaction.account_id}`,
         {
@@ -122,8 +118,6 @@ const AddEntryForm = ({ accounts, addEntryHandler, addTransactionHandler }) => {
           }),
         }
       );
-
-      console.log(resData.data.transaction);
     });
 
     // Adding each transaction to DB
@@ -160,9 +154,18 @@ const AddEntryForm = ({ accounts, addEntryHandler, addTransactionHandler }) => {
           }),
         }
       );
-
-      console.log(resData.data.transaction);
     });
+
+    // sending the entry to backend
+    (async () => {
+      await fetch("http://localhost:3000/users/entry", {
+        method: "POST",
+        headers: {
+          "Content-type": "application/json",
+        },
+        body: JSON.stringify({ ...requireObj, user_id: authState.userId }),
+      });
+    })();
 
     // lifting the data up
     addEntryHandler(requireObj);

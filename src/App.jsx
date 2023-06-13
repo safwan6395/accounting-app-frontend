@@ -5,10 +5,10 @@ import AddEntry from "./sections/AddEntry";
 import Header from "./components/Header";
 import Aside from "./components/Aside";
 import GeneralJournal from "./sections/GeneralJournal";
-
-import "./App.css";
 import AppContext from "./context/AppContext";
 import TAccounts from "./sections/TAccounts";
+
+import "./App.css";
 
 function App() {
   const { authState, setAuthState } = useContext(AppContext);
@@ -24,7 +24,6 @@ function App() {
   // To take new entry from AddEntry which takes entry from AddEntryForm
   const addEntryHandler = (entry) => {
     setEntries((prevState) => [...prevState, entry]);
-    console.log([...entries, entry]);
   };
 
   // To take new account from AddAccount
@@ -68,6 +67,21 @@ function App() {
       const resData = await res.json();
 
       setTransactions(resData.data.transactions);
+    })();
+  }, [authState.userId]);
+
+  // to automatically fetch all entries that user did
+  useEffect(() => {
+    (async () => {
+      const res = await fetch(
+        `http://localhost:3000/users/${authState.userId}/entry`
+      );
+
+      const resData = await res.json();
+
+      resData.data.entries.forEach(e => e.date = e.date.split('T')[0])
+
+      setEntries(resData.data.entries);
     })();
   }, [authState.userId]);
 
