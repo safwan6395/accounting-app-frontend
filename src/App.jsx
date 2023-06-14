@@ -8,8 +8,10 @@ import GeneralJournal from "./sections/GeneralJournal";
 import AppContext from "./context/AppContext";
 import TAccounts from "./sections/TAccounts";
 import FinancialStatements from "./sections/FinancialStatements";
+import TrialBalance from "./sections/TrialBalance";
 
 import "./App.css";
+import AboutUs from "./sections/AboutUs";
 
 function App() {
   const { authState, setAuthState } = useContext(AppContext);
@@ -104,8 +106,9 @@ function App() {
         ) : null}
         {section === 2 ? <GeneralJournal entries={entries} /> : null}
         {section === 3 ? <TAccounts transactions={transactions} /> : null}
-        {section === 4 ? <FinancialStatements accounts={accounts} /> : null}
-        {section === 5 ? <div></div> : null}
+        {section === 4 ? <TrialBalance accounts={accounts} /> : null}
+        {section === 5 ? <FinancialStatements accounts={accounts} /> : null}
+        {section === 6 ? <AboutUs /> : null}
       </main>
     </div>
   );
