@@ -3,7 +3,7 @@ import { Fragment, useContext, useRef, useState } from "react";
 import Modal from "../components/Modal";
 import AppContext from "../context/AppContext";
 
-const AddAccount = ({ addAccountHandler }) => {
+const AddAccount = ({ accounts, addAccountHandler }) => {
   const { authState } = useContext(AppContext);
   const [showModal, setShowModal] = useState({
     visibility: false,
@@ -13,6 +13,11 @@ const AddAccount = ({ addAccountHandler }) => {
   const accountTitle = useRef();
   const accountType = useRef();
   const balanceType = useRef();
+  const belongsTo = useRef();
+
+  const [showExtraField, setShowExtraField] = useState(false);
+
+  const filterAccs = accounts.filter((a) => a.account_type === "asset-account");
 
   const submitHandler = async (e) => {
     e.preventDefault();
@@ -34,6 +39,12 @@ const AddAccount = ({ addAccountHandler }) => {
         reason: "Some input fields are empty",
       });
 
+    if (showExtraField === true && belongsTo.current.value === "")
+      return setShowModal({
+        visibility: true,
+        reason: "Some input fields are empty",
+      });
+
     const res = await fetch("http://localhost:3000/accounts", {
       method: "POST",
       headers: {
@@ -43,6 +54,7 @@ const AddAccount = ({ addAccountHandler }) => {
         account_name: accountTitle.current.value,
         account_type: accountType.current.value,
         balance_type: balanceType.current.value,
+        belongs_to: belongsTo.current?.value,
         user_id: authState.userId,
       }),
     });
@@ -53,6 +65,9 @@ const AddAccount = ({ addAccountHandler }) => {
     accountTitle.current.value = "";
     accountType.current.value = "";
     balanceType.current.value = "";
+    showExtraField ? (belongsTo.current.value = "") : undefined;
+
+    setShowExtraField(false);
   };
 
   return (
@@ -83,6 +98,10 @@ const AddAccount = ({ addAccountHandler }) => {
             className='border-2 border-gray-200 p-2 w-48'
             name='account-type'
             ref={accountType}
+            onChange={(e) =>
+              e.target.value === "contra-asset-account" &&
+              setShowExtraField(true)
+            }
             id=''
           >
             <option className='text-gray-400 disabled selected' value='' hidden>
@@ -113,6 +132,30 @@ const AddAccount = ({ addAccountHandler }) => {
             <option value='credit'>Credit Balance</option>
           </select>
         </label>
+        {showExtraField && (
+          <label className=''>
+            <span className='mr-2'>Belongs To</span>
+            <select
+              className='border-2 border-gray-200 p-2 w-48'
+              name='balance-type'
+              ref={belongsTo}
+              id=''
+            >
+              <option
+                className='text-gray-400 disabled selected'
+                value=''
+                hidden
+              >
+                select asset account
+              </option>
+              {filterAccs.map((a) => (
+                <option key={Math.random()} value={a._id}>
+                  {a.account_name} ({a.account_type})
+                </option>
+              ))}
+            </select>
+          </label>
+        )}
         <button className='mx-auto px-10 py-2 bg-slate-200' type='submit'>
           Add
         </button>

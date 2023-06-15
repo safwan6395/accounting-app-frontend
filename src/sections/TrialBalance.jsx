@@ -1,17 +1,29 @@
 const TrialBalance = ({ accounts }) => {
   const filterAccs = accounts.filter((a) => a.balance !== 0);
 
+  let debitTotal = 0;
+  let creditTotal = 0;
+  let shade = 0;
+
   const formattedAccs = filterAccs.map((a) => {
     if (a.balance_type === "debit") {
-      console.log("first if");
-      if (a.balance > 0) return [a.account_name, a.balance, "-"];
-      else return [a.account_name, "-", a.balance];
+      if (a.balance > 0) {
+        debitTotal += a.balance;
+        return [a.account_name, a.balance, "-"];
+      } else {
+        creditTotal += a.balance;
+        return [a.account_name, "-", a.balance];
+      }
     }
 
     if (a.balance_type === "credit" && a.balance > 0) {
-      console.log("second if");
-      if (a.balance > 0) return [a.account_name, "-", a.balance];
-      else return [a.account_name, a.balance, "-"];
+      if (a.balance > 0) {
+        creditTotal += a.balance;
+        return [a.account_name, "-", a.balance];
+      } else {
+        debitTotal += a.balance;
+        return [a.account_name, a.balance, "-"];
+      }
     }
   });
 
@@ -26,13 +38,26 @@ const TrialBalance = ({ accounts }) => {
           </tr>
         </thead>
         <tbody className=''>
-          {formattedAccs.map(([name, debit, credit], i) => (
-            <tr key={Math.random()} className={i % 2 !== 0 ? 'bg-slate-200' : ''}>
+          {formattedAccs.map(([name, debit, credit], i) => {
+            shade = i + 1;
+            return(
+            <tr
+              key={Math.random()}
+              className={i % 2 !== 0 ? "bg-slate-200" : ""}
+            >
               <td className='text-center py-4'>{name}</td>
-              <td className='text-center pt-4'>{debit}</td>
-              <td className='text-center pt-4'>{credit}</td>
+              <td className='text-center py-4'>{debit}</td>
+              <td className='text-center py-4'>{credit}</td>
             </tr>
-          ))}
+          )})}
+          <tr
+              key={Math.random()}
+              className={shade % 2 !== 0 ? "bg-slate-200" : ""}
+            >
+              <td className='text-center py-4 font-semibold'>Total</td>
+              <td className='text-center py-4'>{debitTotal}</td>
+              <td className='text-center py-4'>{creditTotal}</td>
+            </tr>
         </tbody>
       </table>
     </section>

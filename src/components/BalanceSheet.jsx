@@ -1,9 +1,17 @@
-const BalanceSheet = ({ assetAccs, liabilityAccs, capital }) => {
-  let assetTotal = assetAccs.reduce((acc, a) => acc + a.amount, 0);
+const BalanceSheet = ({
+  assetAccs,
+  contraAssetAccs,
+  liabilityAccs,
+  capital,
+}) => {
+  let assetTotal =
+    assetAccs.reduce((acc, a) => acc + a.amount, 0) -
+    contraAssetAccs.reduce((acc, a) => acc + a.amount, 0);
   let liabilityAndOETotal =
     liabilityAccs.reduce((acc, a) => acc + a.amount, 0) + capital;
 
-  const emptyDivNum = assetAccs.length - liabilityAccs.length - 1;
+  const emptyDivNum =
+    assetAccs.length + contraAssetAccs.length - liabilityAccs.length - 1;
 
   return (
     <div className='mx-auto w-full px-56'>
@@ -26,6 +34,16 @@ const BalanceSheet = ({ assetAccs, liabilityAccs, capital }) => {
                 </td>
                 <td className='py-4 border border-gray-500 text-center'>
                   {a.amount}
+                </td>
+              </tr>
+            ))}
+            {contraAssetAccs.map((a) => (
+              <tr key={Math.random()}>
+                <td className='py-4 border border-gray-500 text-center'>
+                  {a.accName}
+                </td>
+                <td className='py-4 border border-gray-500 text-center'>
+                  ({a.amount})
                 </td>
               </tr>
             ))}

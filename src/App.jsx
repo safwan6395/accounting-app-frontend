@@ -9,9 +9,10 @@ import AppContext from "./context/AppContext";
 import TAccounts from "./sections/TAccounts";
 import FinancialStatements from "./sections/FinancialStatements";
 import TrialBalance from "./sections/TrialBalance";
+import ClosingEntries from "./sections/ClosingEntries";
+import AboutUs from "./sections/AboutUs";
 
 import "./App.css";
-import AboutUs from "./sections/AboutUs";
 
 function App() {
   const { authState, setAuthState } = useContext(AppContext);
@@ -82,7 +83,7 @@ function App() {
 
       const resData = await res.json();
 
-      resData.data.entries.forEach(e => e.date = e.date.split('T')[0])
+      resData.data.entries.forEach((e) => (e.date = e.date.split("T")[0]));
 
       setEntries(resData.data.entries);
     })();
@@ -95,7 +96,10 @@ function App() {
         <Aside section={section} changeSectionHandler={changeSectionHandler} />
 
         {section === 0 ? (
-          <AddAccount addAccountHandler={addAccountHandler} />
+          <AddAccount
+            accounts={accounts}
+            addAccountHandler={addAccountHandler}
+          />
         ) : null}
         {section === 1 ? (
           <AddEntry
@@ -108,7 +112,13 @@ function App() {
         {section === 3 ? <TAccounts transactions={transactions} /> : null}
         {section === 4 ? <TrialBalance accounts={accounts} /> : null}
         {section === 5 ? <FinancialStatements accounts={accounts} /> : null}
-        {section === 6 ? <AboutUs /> : null}
+        {section === 6 ? (
+          <ClosingEntries
+            accounts={accounts}
+            addAccountHandler={addAccountHandler}
+          />
+        ) : null}
+        {section === 7 ? <AboutUs /> : null}
       </main>
     </div>
   );

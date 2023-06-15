@@ -56,6 +56,14 @@ const Aside = ({ section, changeSectionHandler }) => {
           }}
           className={`w-full text-center py-4 ${section === 6 ? "active" : ""}`}
         >
+          <a href='#'>Closing Entries</a>
+        </li>
+        <li
+          onClick={() => {
+            changeSectionHandler(7);
+          }}
+          className={`w-full text-center py-4 ${section === 7 ? "active" : ""}`}
+        >
           <a href='#'>About Us</a>
         </li>
       </ul>

@@ -46,6 +46,15 @@ const FinancialStatements = ({ accounts }) => {
     amount: a.balance,
   }));
 
+  let contraAssetAccs = accounts.filter(
+    (a) => a.account_type === "contra-asset-account" && a.balance !== 0
+  );
+  contraAssetAccs = contraAssetAccs.map((a) => ({
+    accName: a.account_name,
+    amount: a.balance,
+    belongsTo: a.belongs_to,
+  }));
+
   let liabilityAccs = accounts.filter(
     (a) => a.account_type === "liability-account" && a.balance !== 0
   );
@@ -71,6 +80,7 @@ const FinancialStatements = ({ accounts }) => {
       <div className='border mt-12 mb-10 border-t-gray-500' />
       <BalanceSheet
         assetAccs={assetAccs}
+        contraAssetAccs={contraAssetAccs}
         liabilityAccs={liabilityAccs}
         capital={capitalBalance + totalRevenue - totalExpense - drawingsBalance}
       />

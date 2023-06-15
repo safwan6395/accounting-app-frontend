@@ -105,6 +105,7 @@ const AddEntryForm = ({ accounts, addEntryHandler, addTransactionHandler }) => {
       const resData = await res.json();
       addTransactionHandler(resData.data.transaction);
 
+      // Reflecting the effect of transaction on base account 
       await fetch(
         `http://localhost:3000/accounts/${resData.data.transaction.account_id}`,
         {
@@ -140,7 +141,8 @@ const AddEntryForm = ({ accounts, addEntryHandler, addTransactionHandler }) => {
       );
       const resData = await res.json();
       addTransactionHandler(resData.data.transaction);
-
+      
+      // Reflecting the effect of transaction on base account 
       await fetch(
         `http://localhost:3000/accounts/${resData.data.transaction.account_id}`,
         {
