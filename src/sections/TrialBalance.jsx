@@ -16,7 +16,7 @@ const TrialBalance = ({ accounts }) => {
       }
     }
 
-    if (a.balance_type === "credit" && a.balance > 0) {
+    if (a.balance_type === "credit") {
       if (a.balance > 0) {
         creditTotal += a.balance;
         return [a.account_name, "-", a.balance];
@@ -32,7 +32,7 @@ const TrialBalance = ({ accounts }) => {
       <table className='mx-auto w-3/4'>
         <thead>
           <tr className='bg-slate-200'>
-            <th className='py-6'>Accounts</th>
+            <th className='py-6 w-2/3'>Accounts</th>
             <th className='py-6'>Debit</th>
             <th className='py-6'>Credit</th>
           </tr>

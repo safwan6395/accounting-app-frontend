@@ -50,19 +50,19 @@ const Aside = ({ section, changeSectionHandler }) => {
         >
           <a href='#'>Financial Statements</a>
         </li>
-        <li
+       {/* <li
           onClick={() => {
             changeSectionHandler(6);
           }}
           className={`w-full text-center py-4 ${section === 6 ? "active" : ""}`}
         >
           <a href='#'>Closing Entries</a>
-        </li>
+        </li>*/}
         <li
           onClick={() => {
-            changeSectionHandler(7);
+            changeSectionHandler(6);
           }}
-          className={`w-full text-center py-4 ${section === 7 ? "active" : ""}`}
+          className={`w-full text-center py-4 ${section === 6 ? "active" : ""}`}
         >
           <a href='#'>About Us</a>
         </li>

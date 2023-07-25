@@ -1,13 +1,23 @@
 import { Fragment } from "react";
 
 const TAccounts = ({ transactions }) => {
-  const accNames = transactions.map((t) => t.account_name);
-  const uniqueAcc = [...new Set([...accNames])];
+  const acc = transactions.map((t) => ({
+    accId: t.account_id,
+    accName: t.account_name,
+  }));
+
+  const dummyArray = [];
+  const uniqueAcc = acc.filter((a) => {
+    if (!dummyArray.includes(a.accId)) {
+      dummyArray.push(a.accId)
+      return a;
+    }
+  });
 
   const formatedData = uniqueAcc.map((u) => {
-    let tAcc = { name: u, debits: [], credits: [] };
+    let tAcc = { name: u.accName, debits: [], credits: [] };
     transactions.map((t) => {
-      if (t.account_name === u) {
+      if (t.account_id === u.accId) {
         if (t.transaction_type === "Debit") tAcc.debits.push(t.amount);
         if (t.transaction_type === "Credit") tAcc.credits.push(t.amount);
       }
@@ -18,7 +28,9 @@ const TAccounts = ({ transactions }) => {
   return (
     <Fragment>
       {transactions.length === 0 && (
-        <p className='text-center text-xl pt-8 w-full'>No Accounts to display!</p>
+        <p className='text-center text-xl pt-8 w-full'>
+          No Accounts to display!
+        </p>
       )}
       <div>
         <div className='flex flex-wrap'>

@@ -20,6 +20,10 @@ function App() {
   const [accounts, setAccounts] = useState([]);
   const [transactions, setTransactions] = useState([]);
   const [entries, setEntries] = useState([]);
+  const [closingEntries, setClosingEntries] = useState([]);
+
+  const [displayClosingEntriesBtn, setDisplayClosingEntriesBtn] =
+    useState(true);
 
   const changeSectionHandler = (section) => {
     setSection(section);
@@ -35,11 +39,20 @@ function App() {
     setAccounts((prevState) => [...prevState, account]);
   };
 
-  // To take new tranaction from AddEntry which takes entry from AddEntryForm
+  // To take new transaction from AddEntry which takes entry from AddEntryForm
   const addTransactionHandler = (transaction) => {
     setTransactions((prevState) => {
       return [...prevState, transaction];
     });
+  };
+
+  // manage state that decide whether the closing entries are supposed to be displayed or not
+  const displayClosingEntriesBtnHandler = (state) => {
+    setDisplayClosingEntriesBtn(state);
+  };
+
+  const closingEntriesHandler = (entry) => {
+    setClosingEntries((prevState) => [...prevState, entry]);
   };
 
   // to automatically log in
@@ -50,16 +63,18 @@ function App() {
 
   //  to automatically fetch all accounts that user previously created
   useEffect(() => {
-    (async () => {
-      const res = await fetch(
-        `http://localhost:3000/users/${authState.userId}/accounts`
-      );
+    (() => {
+      setTimeout(async () => {
+        const res = await fetch(
+          `http://localhost:3000/users/${authState.userId}/accounts`
+        );
 
-      const resData = await res.json();
+        const resData = await res.json();
 
-      setAccounts(resData.data.accounts);
+        setAccounts(resData.data.accounts);
+      }, 1500);
     })();
-  }, [authState.userId, entries]);
+  }, [authState.userId, entries, closingEntries]);
 
   // to automatically fetch all transactions that user previously did
   useEffect(() => {
@@ -89,12 +104,26 @@ function App() {
     })();
   }, [authState.userId]);
 
+  // to automatically fetch all closing entries that user did
+  useEffect(() => {
+    (async () => {
+      const res = await fetch(
+        `http://localhost:3000/users/${authState.userId}/closingentry`
+      );
+
+      const resData = await res.json();
+
+      resData.data.entries.forEach((e) => (e.date = e.date.split("T")[0]));
+
+      setClosingEntries(resData.data.entries);
+    })();
+  }, [authState.userId]);
+
   return (
     <div className='font-custom flex flex-col h-screen'>
       <Header />
       <main className='w-full flex flex-auto items-stretch'>
         <Aside section={section} changeSectionHandler={changeSectionHandler} />
-
         {section === 0 ? (
           <AddAccount
             accounts={accounts}
@@ -112,13 +141,18 @@ function App() {
         {section === 3 ? <TAccounts transactions={transactions} /> : null}
         {section === 4 ? <TrialBalance accounts={accounts} /> : null}
         {section === 5 ? <FinancialStatements accounts={accounts} /> : null}
-        {section === 6 ? (
+        {/*{section === 6 ? (
           <ClosingEntries
             accounts={accounts}
+            closingEntries={closingEntries}
+            closingEntriesHandler={closingEntriesHandler}
             addAccountHandler={addAccountHandler}
+            addTransactionHandler={addTransactionHandler}
+            displayClosingEntriesBtn={displayClosingEntriesBtn}
+            displayClosingEntriesBtnHandler={displayClosingEntriesBtnHandler}
           />
-        ) : null}
-        {section === 7 ? <AboutUs /> : null}
+        ) : null}*/}
+        {section === 6 ? <AboutUs /> : null}
       </main>
     </div>
   );
