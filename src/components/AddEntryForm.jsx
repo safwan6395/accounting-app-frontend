@@ -86,7 +86,7 @@ const AddEntryForm = ({ accounts, addEntryHandler, addTransactionHandler }) => {
     // Adding each transaction to DB
     requireObj.debitAccounts.forEach(async (debAcc) => {
       const res = await fetch(
-        `http://localhost:3000/accounts/${debAcc._id}/transactions`,
+        `https://accounting-app-backend.cyclic.cloud/accounts/${debAcc._id}/transactions`,
         {
           method: "POST",
           headers: {
@@ -107,7 +107,7 @@ const AddEntryForm = ({ accounts, addEntryHandler, addTransactionHandler }) => {
 
       // Reflecting the effect of transaction on base account 
       await fetch(
-        `http://localhost:3000/accounts/${resData.data.transaction.account_id}`,
+        `https://accounting-app-backend.cyclic.cloud/accounts/${resData.data.transaction.account_id}`,
         {
           method: "PATCH",
           headers: {
@@ -124,7 +124,7 @@ const AddEntryForm = ({ accounts, addEntryHandler, addTransactionHandler }) => {
     // Adding each transaction to DB
     requireObj.creditAccounts.forEach(async (credAcc) => {
       const res = await fetch(
-        `http://localhost:3000/accounts/${credAcc._id}/transactions`,
+        `https://accounting-app-backend.cyclic.cloud/accounts/${credAcc._id}/transactions`,
         {
           method: "POST",
           headers: {
@@ -144,7 +144,7 @@ const AddEntryForm = ({ accounts, addEntryHandler, addTransactionHandler }) => {
       
       // Reflecting the effect of transaction on base account 
       await fetch(
-        `http://localhost:3000/accounts/${resData.data.transaction.account_id}`,
+        `https://accounting-app-backend.cyclic.cloud/accounts/${resData.data.transaction.account_id}`,
         {
           method: "PATCH",
           headers: {
@@ -160,7 +160,7 @@ const AddEntryForm = ({ accounts, addEntryHandler, addTransactionHandler }) => {
 
     // sending the entry to backend
     (async () => {
-      await fetch("http://localhost:3000/users/entry", {
+      await fetch("https://accounting-app-backend.cyclic.cloud/users/entry", {
         method: "POST",
         headers: {
           "Content-type": "application/json",

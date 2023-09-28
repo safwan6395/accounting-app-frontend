@@ -45,7 +45,7 @@ const AddAccount = ({ accounts, addAccountHandler }) => {
         reason: "Some input fields are empty",
       });
 
-    const res = await fetch("http://localhost:3000/accounts", {
+    const res = await fetch("https://accounting-app-backend.cyclic.cloud/accounts", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

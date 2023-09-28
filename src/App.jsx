@@ -66,7 +66,7 @@ function App() {
     (() => {
       setTimeout(async () => {
         const res = await fetch(
-          `http://localhost:3000/users/${authState.userId}/accounts`
+          `https://accounting-app-backend.cyclic.cloud/users/${authState.userId}/accounts`
         );
 
         const resData = await res.json();
@@ -80,7 +80,7 @@ function App() {
   useEffect(() => {
     (async () => {
       const res = await fetch(
-        `http://localhost:3000/users/${authState.userId}/transactions`
+        `https://accounting-app-backend.cyclic.cloud/users/${authState.userId}/transactions`
       );
 
       const resData = await res.json();
@@ -93,7 +93,7 @@ function App() {
   useEffect(() => {
     (async () => {
       const res = await fetch(
-        `http://localhost:3000/users/${authState.userId}/entry`
+        `https://accounting-app-backend.cyclic.cloud/users/${authState.userId}/entry`
       );
 
       const resData = await res.json();
@@ -108,7 +108,7 @@ function App() {
   useEffect(() => {
     (async () => {
       const res = await fetch(
-        `http://localhost:3000/users/${authState.userId}/closingentry`
+        `https://accounting-app-backend.cyclic.cloud/users/${authState.userId}/closingentry`
       );
 
       const resData = await res.json();

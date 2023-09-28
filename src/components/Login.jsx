@@ -13,7 +13,7 @@ const Login = ({ hideModal }) => {
       email.current.value.trim().length !== 0 &&
       password.current.value.trim().length !== 0
     ) {
-      const res = await fetch("http://localhost:3000/login", {
+      const res = await fetch("https://accounting-app-backend.cyclic.cloud/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

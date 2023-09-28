@@ -55,7 +55,7 @@ const ClosingEntries = ({
     let id;
     await (async () => {
       if (!accounts.some((a) => a.account_type === "income-summary-account")) {
-        const res = await fetch("http://localhost:3000/accounts", {
+        const res = await fetch("https://accounting-app-backend.cyclic.cloud/accounts", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -189,7 +189,7 @@ const ClosingEntries = ({
       // Adding each transaction to DB
       await requireObj.debitAccounts.forEach(async (debAcc) => {
         const res = await fetch(
-          `http://localhost:3000/accounts/${debAcc._id}/transactions`,
+          `https://accounting-app-backend.cyclic.cloud/accounts/${debAcc._id}/transactions`,
           {
             method: "POST",
             headers: {
@@ -210,7 +210,7 @@ const ClosingEntries = ({
 
         // Reflecting the effect of transaction on base account
         const clg = await fetch(
-          `http://localhost:3000/accounts/${resData.data.transaction.account_id}`,
+          `https://accounting-app-backend.cyclic.cloud/accounts/${resData.data.transaction.account_id}`,
           {
             method: "PATCH",
             headers: {
@@ -228,7 +228,7 @@ const ClosingEntries = ({
       // Adding each transaction to DB
       await requireObj.creditAccounts.forEach(async (credAcc) => {
         const res = await fetch(
-          `http://localhost:3000/accounts/${credAcc._id}/transactions`,
+          `https://accounting-app-backend.cyclic.cloud/accounts/${credAcc._id}/transactions`,
           {
             method: "POST",
             headers: {
@@ -248,7 +248,7 @@ const ClosingEntries = ({
 
         // Reflecting the effect of transaction on base account
         const clg2 = await fetch(
-          `http://localhost:3000/accounts/${resData.data.transaction.account_id}`,
+          `https://accounting-app-backend.cyclic.cloud/accounts/${resData.data.transaction.account_id}`,
           {
             method: "PATCH",
             headers: {
@@ -265,7 +265,7 @@ const ClosingEntries = ({
 
       // sending the entry to backend
       await (async () => {
-        await fetch("http://localhost:3000/users/closingentry", {
+        await fetch("https://accounting-app-backend.cyclic.cloud/users/closingentry", {
           method: "POST",
           headers: {
             "Content-type": "application/json",
@@ -278,7 +278,7 @@ const ClosingEntries = ({
     });
 
     setTimeout(async () => {
-      const res = await fetch(`http://localhost:3000/accounts/zero/${id}`, {
+      const res = await fetch(`https://accounting-app-backend.cyclic.cloud/accounts/zero/${id}`, {
         method: "PATCH",
         headers: {
           "Content-type": "application/json",
